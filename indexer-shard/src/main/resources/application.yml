@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: indexer-shard
+
+application:
+  shard:
+    name: xxx
