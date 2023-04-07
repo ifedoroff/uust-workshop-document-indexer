@@ -1,0 +1,1 @@
+mvnw -pl indexer-shard -am spring-boot:run -Dspring-boot.run.arguments="--master_host=localhost --server.port=8050 --application.shard.name=xxx"

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link href = "css/bootstrap.css" rel = "stylesheet"/>
+    <script src="jquery-3.6.3.js"></script>
+    <script src="js/bootstrap.bundle.js"></script>
+    <title>Indexer</title>
+
+</head>
+<body>
+<div class="container-fluid">
+    <div class="alert alert-danger" role="alert" th:if="${exception != null}" th:utext="${exception == null} ? '' : ${exception.getMessage()} ">
+
+    </div>
+    <div class="row mt-5">
+        <div class="col">
+            <h2 >Shards</h2>
+            <ul class="list-group" th:each="shard:${shards}" th:if="shards != null" >
+                <li class="list-group-item mt-1" th:text="${shard.print()}"></li>
+            </ul>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col">
+            <h2 >Upload a document</h2>
+            <form action="/index" class="form-inline" id="indexForm" method="post" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col">
+                        <input class="form-control" type="file" id="formFile" name="file">
+                    </div>
+                    <div class="col-auto">
+                        <button class="btn btn-outline-secondary" type="submit" id="submitButton" >Upload</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col">
+            <div class="row">
+                <div class="col">
+                    <h2 >Search for a file</h2>
+                    <form action="/search" class="form-inline"  enctype="application/x-www-form-urlencoded" method="get">
+                        <div class="row">
+                            <div class="col">
+                                <input type="search" placeholder="Search here..." aria-describedby="button-addon5" class="form-control" name="query">
+                            </div>
+                            <div class="col-auto">
+                                <button id="searchButton" type="submit" class="btn btn-outline-secondary"> Search</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <ul class="list-group" th:each="document:${result.documents}" >
+                        <li class="list-group-item mt-1" th:text="${document.print()}"></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
