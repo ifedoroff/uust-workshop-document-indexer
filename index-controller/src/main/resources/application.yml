@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: index-controller
+
+shard:
+  urls:
+    - "localhost:8082"
+    - "localhost:8083"
+    - "localhost:8084"
