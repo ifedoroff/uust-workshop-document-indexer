@@ -31,10 +31,11 @@ public class Controller {
     @SneakyThrows
     public Controller(Storage storage,
                       @Value("${application.shard.name:default_shard_#{T(java.util.UUID).randomUUID().toString()}}") String shardName,
+                      @Value("${server.address}") String host,
                       @Value("${server.port}") String port) {
         this.storage = storage;
         this.shardName = shardName;
-        this.host = InetAddress.getLocalHost().getHostAddress();
+        this.host = host;
         this.port = Integer.valueOf(port);
     }
 

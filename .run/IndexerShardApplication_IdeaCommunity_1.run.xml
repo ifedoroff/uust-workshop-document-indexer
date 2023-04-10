@@ -2,7 +2,7 @@
   <configuration default="false" name="IndexerShardApplication_IdeaCommunity_1" type="Application" factoryName="Application">
     <option name="MAIN_CLASS_NAME" value="ru.tinkoff.indexershard.IndexerShardApplication" />
     <module name="indexer-shard" />
-    <option name="PROGRAM_PARAMETERS" value="--server.port=8082 --application.shard.name=shard1 " />
+    <option name="PROGRAM_PARAMETERS" value="--server.port=8082 --application.shard.name=shard1 --master_host=remote_address  --server.address=my_address" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="ru.tinkoff.indexershard.*" />

@@ -5,3 +5,8 @@ spring:
 application:
   shard:
     name: xxx
+
+server:
+  address:  my_address
+
+master_host: remote_address
