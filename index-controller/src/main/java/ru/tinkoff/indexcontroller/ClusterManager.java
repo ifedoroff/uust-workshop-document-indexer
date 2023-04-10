@@ -13,8 +13,8 @@ import reactor.core.publisher.Mono;
 import ru.tinkoff.common.ShardInfo;
 
 import javax.annotation.PostConstruct;
+import java.time.Duration;
 import java.util.*;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service
@@ -50,6 +50,7 @@ public class ClusterManager {
                 .map(url -> singleShardInfo(url.split(":")[0], Integer.parseInt(url.split(":")[1])))
                 .collect(Collectors.toList());
         shards = Mono.zip(results, (array) -> Arrays.stream(array).map(s -> (ShardInfo)s).collect(Collectors.toList()))
+                .timeout(Duration.ofSeconds(10))
                 .block();
     }
 
@@ -59,6 +60,7 @@ public class ClusterManager {
                 .uri(uriBuilder -> uriBuilder.path("info")
                         .build())
                 .exchangeToMono(clientResponse -> clientResponse.bodyToMono(ShardInfo.class))
+                .timeout(Duration.ofSeconds(10))
                 .onErrorResume(t -> Mono.just(new ShardInfo("failed", host, port, -1)));
     }
 
