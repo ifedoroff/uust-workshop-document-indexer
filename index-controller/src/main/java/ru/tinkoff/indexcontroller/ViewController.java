@@ -97,7 +97,7 @@ public class ViewController {
         if(exceptions.size() <= 5) {
             exceptions.add(e);
         }
-        attributes.addAttribute("exceptions", exceptions);
+        attributes.addFlashAttribute("exceptions", exceptions);
     }
 
     private Mono<SearchResult> querySingleShard(ShardInfo shard, String query) {
