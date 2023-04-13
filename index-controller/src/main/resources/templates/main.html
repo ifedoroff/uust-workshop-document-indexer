@@ -9,8 +9,9 @@
 </head>
 <body>
 <div class="container-fluid">
-    <div class="alert alert-danger" role="alert" th:if="${exception != null}" th:utext="${exception == null} ? '' : ${exception.getMessage()} ">
-
+    <div class="alert alert-danger" role="alert" th:if="${exceptions != null}" th:each="exception:${exceptions}">
+        <div class="alert alert-danger" role="alert" th:utext="${exception == null} ? '' : ${exception.getMessage()} ">
+        </div>
     </div>
     <div class="row mt-5">
         <div class="col">

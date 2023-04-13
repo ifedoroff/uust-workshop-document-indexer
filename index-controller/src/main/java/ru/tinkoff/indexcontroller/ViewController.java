@@ -21,10 +21,7 @@ import ru.tinkoff.common.SearchResult;
 import ru.tinkoff.common.ShardInfo;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
@@ -67,7 +64,7 @@ public class ViewController {
                 .retrieve()
                 .bodyToMono(String.class)
                 .doOnError(e -> {
-                    model.addFlashAttribute("exception", e);
+                    recordException(model, e);
                 })
                 .onErrorResume((t) -> Mono.just("redirect:/main"))
                 .map((responseEntity) -> "redirect:/main");
@@ -76,7 +73,7 @@ public class ViewController {
     @GetMapping(path = "/search", produces = "application/json")
     public Mono<String> search(@RequestParam("query") String query, RedirectAttributes model) {
         return Mono.zip(clusterManager.allShards().stream()
-                .map(shard -> querySingleShard(shard, query))
+                .map(shard -> querySingleShard(shard, query).doOnError(e -> recordException(model, e)))
                 .collect(Collectors.toList()), array -> {
             List<SearchResult.Document> documents = Arrays.stream(array)
                     .map(o -> (SearchResult) o)
@@ -87,9 +84,20 @@ public class ViewController {
             return "redirect:/main";
         })
         .doOnError(e -> {
-            model.addFlashAttribute("exception", e);
+            recordException(model, e);
         })
         .onErrorResume((t) -> Mono.just("redirect:/main"));
+    }
+
+    private void recordException(RedirectAttributes attributes, Throwable e) {
+        List exceptions = (List) attributes.getFlashAttributes().get("exceptions");
+        if(exceptions == null) {
+            exceptions = new ArrayList<>();
+        }
+        if(exceptions.size() <= 5) {
+            exceptions.add(e);
+        }
+        attributes.addAttribute("exceptions", exceptions);
     }
 
     private Mono<SearchResult> querySingleShard(ShardInfo shard, String query) {
